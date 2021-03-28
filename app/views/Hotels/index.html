@@ -98,6 +98,8 @@
       <td>{{.CheckOutDate.Format "2006-01-02"}}</td>
       <td>{{.BookingId}}</td>
       <td>
+        <a href="/bookings/{{.BookingId}}/print" target="_blank" rel="noopener noreferrer">Download</a>
+        &nbsp;&nbsp;
         <form id="d{{.BookingId}}" method="POST" action="/bookings/{{.BookingId}}/cancel">
           <a href="javascript:document.getElementById('d{{.BookingId}}').submit();">Cancel</a>
         </form>

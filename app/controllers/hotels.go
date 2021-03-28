@@ -35,6 +35,7 @@ import (
 	"github.com/revel/revel"
 	"github.com/unidoc/unipdf-examples/project/booking/app/models"
 	"github.com/unidoc/unipdf-examples/project/booking/app/routes"
+	"github.com/unidoc/unipdf-examples/project/booking/app/utils"
 
 	"github.com/Masterminds/squirrel"
 )
@@ -233,6 +234,21 @@ func (c Hotels) CancelBooking(id int) revel.Result {
 	}
 	c.Flash.Success(fmt.Sprintln("Booking cancelled for confirmation number", id))
 	return c.Redirect(routes.Hotels.Index())
+}
+
+func (c Hotels) PrintBooking(id int) revel.Result {
+	booking := &models.Booking{}
+	err := c.Db.Map.SelectOne(&booking, "select * from Booking where BookingId=?", id)
+	if err != nil {
+		panic(err)
+	}
+
+	pdfPath, err := utils.GeneratePDF(*booking)
+	if err != nil {
+		revel.AppLog.Error(err.Error())
+	}
+
+	return c.RenderFileName(pdfPath, revel.Attachment)
 }
 
 func (c Hotels) Book(id int) revel.Result {

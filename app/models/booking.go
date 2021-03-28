@@ -2,10 +2,11 @@ package models
 
 import (
 	"fmt"
-	"github.com/revel/revel"
 	"regexp"
 	"time"
+
 	"github.com/go-gorp/gorp"
+	"github.com/revel/revel"
 )
 
 type Booking struct {

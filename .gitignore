@@ -3,3 +3,4 @@ app/routes/routes.go
 app/tmp/main.go
 app/tmp/run/run.go
 target/app/github.com/unidoc/unipdf-examples/project/booking/unipdf-demo
+.DS_Store

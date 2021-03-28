@@ -13,6 +13,7 @@ GET     /hotels/:id                             Hotels.Show
 GET     /hotels/:id/booking                     Hotels.Book
 POST    /hotels/:id/booking                     Hotels.ConfirmBooking
 POST    /bookings/:id/cancel                    Hotels.CancelBooking
+GET     /bookings/:id/print                     Hotels.PrintBooking
 GET     /register                               Application.Register
 POST    /register                               Application.SaveUser
 GET     /settings                               Hotels.Settings
