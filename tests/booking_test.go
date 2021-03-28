@@ -7,15 +7,16 @@ package tests_test
 import (
 	"testing"
 
+	"strings"
+
 	"github.com/revel/cmd/model"
 	revelParser "github.com/revel/cmd/parser"
 	"github.com/revel/revel"
-	"strings"
 )
 
-func getRevelContainer() *model.RevelContainer{
+func getRevelContainer() *model.RevelContainer {
 
-	paths, _ := model.NewRevelPaths("prod","github.com/revel/examples/booking", model.NewWrappedRevelCallback(nil, nil))
+	paths, _ := model.NewRevelPaths("prod", "github.com/revel/examples/booking", model.NewWrappedRevelCallback(nil, nil))
 
 	return paths
 }
@@ -34,9 +35,9 @@ func TestProcessBookingSource(t *testing.T) {
 		{"Hotels", controllerPackage, "controllers", nil, nil},
 	}
 	specList := []*model.TypeInfo{}
-	for _,x := range sourceInfo.ControllerSpecs() {
-		if strings.HasPrefix(x.ImportPath,controllerPackage) {
-			specList = append(specList,x)
+	for _, x := range sourceInfo.ControllerSpecs() {
+		if strings.HasPrefix(x.ImportPath, controllerPackage) {
+			specList = append(specList, x)
 		}
 	}
 	if len(specList) != len(expectedControllerSpecs) {

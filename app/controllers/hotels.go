@@ -33,9 +33,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/revel/revel"
-
-	"github.com/revel/examples/booking/app/models"
-	"github.com/revel/examples/booking/app/routes"
+	"github.com/unidoc/unipdf-examples/project/booking/app/models"
+	"github.com/unidoc/unipdf-examples/project/booking/app/routes"
 
 	"github.com/Masterminds/squirrel"
 )
@@ -127,7 +126,7 @@ func (c Hotels) ListJson(search string, size, page uint64) revel.Result {
 		c.Log.Fatal("Unexpected error loading hotels", "error", err)
 	}
 
-	return c.RenderJSON(map[string]interface{}{"hotels":hotels, "search":search, "size":size, "page":page, "nextPage":nextPage})
+	return c.RenderJSON(map[string]interface{}{"hotels": hotels, "search": search, "size": size, "page": page, "nextPage": nextPage})
 }
 func (c Hotels) List(search string, size, page uint64) revel.Result {
 	if page == 0 {

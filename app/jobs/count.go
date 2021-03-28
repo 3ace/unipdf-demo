@@ -2,11 +2,12 @@ package jobs
 
 import (
 	"fmt"
+
 	"github.com/revel/revel"
-    
+	"github.com/unidoc/unipdf-examples/project/booking/app/models"
+
 	"github.com/revel/modules/jobs/app/jobs"
-	"github.com/revel/modules/orm/gorp/app"
-	"github.com/revel/examples/booking/app/models"
+	gorp "github.com/revel/modules/orm/gorp/app"
 )
 
 // Periodically count the bookings in the database.

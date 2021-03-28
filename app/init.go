@@ -2,16 +2,17 @@ package app
 
 import (
 	"fmt"
-	"github.com/revel/examples/booking/app/models"
+	"net/http"
+	"os"
+	"time"
+
+	"github.com/go-gorp/gorp"
 	rgorp "github.com/revel/modules/orm/gorp/app"
 	"github.com/revel/revel"
+	"github.com/revel/revel/logger"
+	"github.com/unidoc/unipdf-examples/project/booking/app/models"
 	"github.com/valyala/fasthttp"
 	"golang.org/x/crypto/bcrypt"
-	"github.com/go-gorp/gorp"
-	"net/http"
-	"time"
-	"os"
-	"github.com/revel/revel/logger"
 )
 
 func init() {
@@ -30,7 +31,7 @@ func init() {
 		revel.CompressFilter,          // Compress the result.
 		revel.ActionInvoker,           // Invoke the action.
 	}
-	logger.LogFunctionMap["stdoutjson"]=
+	logger.LogFunctionMap["stdoutjson"] =
 		func(c *logger.CompositeMultiHandler, options *logger.LogOptions) {
 			// Set the json formatter to os.Stdout, replace any existing handlers for the level specified
 			c.SetJson(os.Stdout, options)
@@ -40,7 +41,7 @@ func init() {
 		case revel.ENGINE_BEFORE_INITIALIZED:
 
 			if revel.RunMode == "dev-fast" {
-				revel.AddHTTPMux("/this/is/a/test",fasthttp.RequestHandler( func(ctx *fasthttp.RequestCtx) {
+				revel.AddHTTPMux("/this/is/a/test", fasthttp.RequestHandler(func(ctx *fasthttp.RequestCtx) {
 					fmt.Fprintln(ctx, "Hi there, it worked", string(ctx.Path()))
 					ctx.SetStatusCode(200)
 				}))
