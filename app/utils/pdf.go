@@ -45,19 +45,15 @@ func GeneratePDF(booking models.Booking) (string, error) {
 
 	title := c.NewStyledParagraph()
 	title.SetTextAlignment(creator.TextAlignmentCenter)
-	tc := title.SetText("Hotel Booking Information")
+	tc := title.SetText(booking.Hotel.Name)
 	tc.Style.Font = fontBold
+	tc.Style.FontSize = 25
 
 	if err := c.Draw(title); err != nil {
 		return "", err
 	}
 
-	table := c.NewTable(2)
-	table.SetMargins(0, 0, 20, 0)
-
-	if err := table.SetColumnWidths(0.2, 0.8); err != nil {
-		return "", err
-	}
+	var table *creator.Table
 
 	drawCell := func(text string, font *model.PdfFont, align creator.CellHorizontalAlignment) {
 		if text == "" {
@@ -80,20 +76,43 @@ func GeneratePDF(booking models.Booking) (string, error) {
 		smoking = "Yes"
 	}
 
+	chapter := c.NewChapter("Guest Info")
+	chapter.GetHeading().SetFontSize(16)
+
+	table = c.NewTable(2)
+	table.SetMargins(0, 0, 20, 0)
+
+	if err := table.SetColumnWidths(0.2, 0.8); err != nil {
+		return "", err
+	}
+
 	drawCell("Name", fontBold, creator.CellHorizontalAlignmentLeft)
 	drawCell(booking.User.Name, font, creator.CellHorizontalAlignmentLeft)
 
-	drawCell("Hotel", fontBold, creator.CellHorizontalAlignmentLeft)
-	drawCell(booking.Hotel.Name, font, creator.CellHorizontalAlignmentLeft)
+	if err := chapter.Add(table); err != nil {
+		return "", err
+	}
+
+	if err := c.Draw(chapter); err != nil {
+		return "", err
+	}
+
+	chapter = c.NewChapter("Hotel Info")
+	chapter.GetHeading().SetFontSize(16)
+	chapter.GetHeading().SetMargins(0, 0, 20, 0)
+
+	table = c.NewTable(2)
+	table.SetMargins(0, 0, 20, 0)
+
+	if err := table.SetColumnWidths(0.2, 0.8); err != nil {
+		return "", err
+	}
 
 	drawCell("Address", fontBold, creator.CellHorizontalAlignmentLeft)
 	drawCell(address, font, creator.CellHorizontalAlignmentLeft)
 
 	drawCell("Beds", fontBold, creator.CellHorizontalAlignmentLeft)
 	drawCell(fmt.Sprintf("%d bed", booking.Beds), font, creator.CellHorizontalAlignmentLeft)
-
-	drawCell("Nights", fontBold, creator.CellHorizontalAlignmentLeft)
-	drawCell(fmt.Sprintf("%d nights", booking.Nights()), font, creator.CellHorizontalAlignmentLeft)
 
 	drawCell("Smoking Area", fontBold, creator.CellHorizontalAlignmentLeft)
 	drawCell(smoking, font, creator.CellHorizontalAlignmentLeft)
@@ -104,6 +123,17 @@ func GeneratePDF(booking models.Booking) (string, error) {
 	drawCell("Check Out", fontBold, creator.CellHorizontalAlignmentLeft)
 	drawCell(booking.CheckOutStr, font, creator.CellHorizontalAlignmentLeft)
 
+	drawCell("Nights", fontBold, creator.CellHorizontalAlignmentLeft)
+	drawCell(fmt.Sprintf("%d nights", booking.Nights()), font, creator.CellHorizontalAlignmentLeft)
+
+	if err := chapter.Add(table); err != nil {
+		return "", err
+	}
+
+	if err := c.Draw(chapter); err != nil {
+		return "", err
+	}
+
 	c.DrawHeader(func(block *creator.Block, args creator.HeaderFunctionArgs) {
 		desc := c.NewStyledParagraph()
 		desc.SetText("Hotel Booking Information")
@@ -111,10 +141,6 @@ func GeneratePDF(booking models.Booking) (string, error) {
 
 		_ = block.Draw(desc)
 	})
-
-	if err := c.Draw(table); err != nil {
-		return "", err
-	}
 
 	fileName := fmt.Sprintf("%s_%s.pdf", strings.ReplaceAll(booking.Hotel.Name, " ", "_"),
 		strings.ReplaceAll(booking.User.Name, " ", "_"))
